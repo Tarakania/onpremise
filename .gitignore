@@ -71,6 +71,9 @@ docker-compose.override.yml
 # env config
 .env
 
+# config file
+config.yml
+
 *.tar
 data/
 .vscode/tags
