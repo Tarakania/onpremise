@@ -1,11 +1,3 @@
-# NOTE: This docker-compose.yml is meant to be just an example of how
-# you could accomplish this on your own. It is not intended to work in
-# all use-cases and must be adapted to fit your needs. This is merely
-# a guideline.
-
-# See docs.getsentry.com/on-premise/server/ for full
-# instructions
-
 version: '3.4'
 
 x-defaults: &defaults
@@ -31,19 +23,19 @@ x-defaults: &defaults
 
 services:
   smtp:
-    restart: unless-stopped
+    restart: always
     image: tianon/exim4
 
   memcached:
-    restart: unless-stopped
+    restart: always
     image: memcached:1.5-alpine
 
   redis:
-    restart: unless-stopped
+    restart: always
     image: redis:3.2-alpine
 
   postgres:
-    restart: unless-stopped
+    restart: always
     image: postgres:9.5
     volumes:
       - sentry-postgres:/var/lib/postgresql/data
@@ -60,13 +52,14 @@ services:
     command: run worker
 
   haproxy:
-    restart: unless-stopped
+    # set cert volume and stats credentials env vars in docker-compose.overrides.yml
+    restart: always
     build:
       context: haproxy
     ports:
-      - '9000:9000'
-
-
+      - '80:80'
+      - '443:443'
+      - '1936:1936'
 
 volumes:
     sentry-data:
